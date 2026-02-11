@@ -19,6 +19,16 @@ jobs:
           java-version: 21
           cache: maven
 
+      - name: Set up Maven settings
+        uses: s4u/maven-settings-action@v2
+        with:
+          servers: |
+            [{
+              "id": "github",
+              "username": "${{ github.actor }}",
+              "password": "${{ secrets.GITHUB_TOKEN }}"
+            }]
+
       - name: Build and Deploy
         run: mvn clean deploy -DskipTests
         env:
