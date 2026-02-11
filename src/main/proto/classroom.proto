@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package classroom;
+
+option java_multiple_files = true;
+option java_package = "com.theclassrooms.proto.classroom";
+option java_outer_classname = "ClassroomProto";
+
+import "google/protobuf/timestamp.proto";
+
+message Classroom {
+  string id = 1;
+  string name = 2;
+  optional string description = 3;
+  ClassroomType type = 4;
+  ClassroomStatus status = 5;
+  string instructor_id = 6;
+  optional string class_code = 7;
+  optional google.protobuf.Timestamp end_time = 8;
+  optional string thumbnail_url = 9;
+  optional string banner_url = 10;
+}
+
+enum ClassroomType {
+  CLASSROOM_TYPE_UNSPECIFIED = 0;
+  PUBLIC = 1;
+  PRIVATE = 2;
+}
+
+enum ClassroomStatus {
+  CLASSROOM_STATUS_UNSPECIFIED = 0;
+  ACTIVE = 1;
+  CLOSED = 2;
+  DELETED = 3;
+}
+
+service ClassroomService {
+  rpc GetClassroom (GetClassroomRequest)
+      returns (GetClassroomResponse);
+}
+
+message GetClassroomRequest {
+  string id = 1;
+}
+
+message GetClassroomResponse {
+  Classroom classroom = 1;
+}
