@@ -19,12 +19,44 @@ message Classroom {
   optional google.protobuf.Timestamp end_time = 8;
   optional string thumbnail_url = 9;
   optional string banner_url = 10;
+  optional google.protobuf.Timestamp create_at = 11;
+  optional google.protobuf.Timestamp updated_at = 12;
+}
+
+message PageableRequest {
+  int32 page = 1;
+  int32 size = 2;
+  repeated string sorts = 3; // "name,asc"
+}
+
+message PageInfo {
+  int32 total_pages = 1;
+  int64 total_elements = 2;
+  int32 number = 3;
+  int32 size = 4;
+  bool first = 5;
+  bool last = 6;
+  bool empty = 7;
+}
+
+message ClassroomPage {
+  repeated Classroom content = 1;
+  PageInfo page_info = 2;
+}
+
+message GetClassroomPageByInstructorIdRequest {
+  string instructor_id = 1;
+  PageableRequest pageable = 2;
 }
 
 enum ClassroomType {
   CLASSROOM_TYPE_UNSPECIFIED = 0;
   PUBLIC = 1;
   PRIVATE = 2;
+}
+
+message GetClassroomPageByInstructorIdResponse {
+  ClassroomPage page = 1;
 }
 
 enum ClassroomStatus {
@@ -37,6 +69,10 @@ enum ClassroomStatus {
 service ClassroomService {
   rpc GetClassroom (GetClassroomRequest)
       returns (GetClassroomResponse);
+
+  rpc GetClassroomPageByInstructorId (
+      GetClassroomPageByInstructorIdRequest
+      ) returns (GetClassroomPageByInstructorIdResponse);
 }
 
 message GetClassroomRequest {
